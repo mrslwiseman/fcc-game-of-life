@@ -20,12 +20,22 @@ const game = (function(){
     
     ]
 
+// let grid = [
+//     [0,1,0],
+//     [0,1,1],
+//     [0,0,1]
+// ]
+
 function init(){
     const renderNextBtn = document.querySelector('.controls__next');
-    renderNextBtn.addEventListener('click', (e) => renderGrid() )
+    renderNextBtn.addEventListener('click', (e) => {setGridState()} )
 
-    renderGrid();
 }
+
+function setGridState(){
+    grid = drawGrid();
+}
+
 
     function applyRules(i, j, cell) {
         const alive = cell === 1 ? true : false;
@@ -120,15 +130,8 @@ function init(){
         return neighbours;
     }
 
-    const updateGrid = () => {
-        grid = grid.map((row, i) => {
-            return row.map((cell, j) => {
-                return applyRules(i, j, cell)
-            })
-        })
-        }
-        
-    const renderGrid = () => {
+    const drawGrid = () => {
+
         const canvas = document.querySelector('canvas')
         const ctx = canvas.getContext('2d');
         const w = 20
@@ -141,9 +144,12 @@ function init(){
         ctx.fill()
         ctx.closePath()
 
-        grid.forEach((row, y) => {
-            row.forEach((cell, x) => {
-                // draw live cells only
+        
+        return grid.map((row, y) => {
+            console.log({row})
+            return row.map((cell, x) => {
+                console.log({cell})
+
                 if(cell === 1){
                     ctx.beginPath()
                     ctx.rect(x*20,y*20,w,h)
@@ -151,14 +157,44 @@ function init(){
                     ctx.fill();
                     ctx.closePath()
                 } 
-           
+
+                return applyRules(y, x, cell) // return 1 || 0
             })
         })
-        updateGrid();
-    }
+        }
+        
+    // const renderGrid = () => {
+    //     const canvas = document.querySelector('canvas')
+    //     const ctx = canvas.getContext('2d');
+    //     const w = 20
+    //     const h = 20
+        
+    //     // clear canvas on each render
+    //     ctx.beginPath()
+    //     ctx.rect(0,0,600,600)
+    //     ctx.fillStyle = 'grey'
+    //     ctx.fill()
+    //     ctx.closePath()
+
+    //     grid.forEach((row, y) => {
+    //         row.forEach((cell, x) => {
+    //             // draw live cells only
+    //             if(cell === 1){
+    //                 ctx.beginPath()
+    //                 ctx.rect(x*20,y*20,w,h)
+    //                 ctx.fillStyle = 'yellow'
+    //                 ctx.fill();
+    //                 ctx.closePath()
+    //             } 
+           
+    //         })
+    //     })
+    //     drawGrid();
+    // }
 init();
 
 return {
-    play: renderGrid
+    play: drawGrid,
+    grid: grid
 }
 })()
