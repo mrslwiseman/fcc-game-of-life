@@ -36,25 +36,27 @@ function setGridState(){
     grid = drawGrid();
 }
 
+// function updateGrid(prevGrid, nextGrid){
+//     prev
+//     return nextGrid
+// }
+
 
     function applyRules(i, j, cell) {
         const alive = cell === 1 ? true : false;
-        const nLength = listNeighbours(i, j)
-    
-        let result = cell;
-        // console.log({i,j, cell, nLength})
+        const neighbours = listNeighbours(i, j) // returns a number of neighbours
+        let change = false;
+
         if(alive){
-            if(nLength <= 1 || nLength >= 4){
-                result = 0 //dead
+            if(neighbours <= 1 || neighbours >= 4){
+                change = 0 //dead
             } else {
-                result = 1;
+                change = 1;
             }  
-        } else {
-            if(nLength === 3){
-                result = 1;
-            }
+        } else if(neighbours === 3){ // if dead but has 3 neighbours, comes to life
+                change = 1;
         }
-    return result;
+    return change === false ? cell : change;
     
     }
 
