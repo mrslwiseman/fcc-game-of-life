@@ -2,24 +2,9 @@ const game = (function(){
 "use strict";
 
     let grid = [
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+        [1,0,0],
+        [0,1,1],
+        [0,0,1]
     
     ]
 
@@ -133,14 +118,20 @@ function init(){
         
     const renderGrid = () => {
         const gridContainer = document.querySelector('.gridContainer');
-        gridContainer.innerHTML = "";
+        // gridContainer.innerHTML = "";
         // ==> array
-        grid.forEach(row => {
-            row.forEach(cell => {
-                // insert an element
-                const alive = cell === 1 ? true : false;
-                const cellHTML = `<div ${alive ? "class=alive" : ''}></div>`
-                gridContainer.insertAdjacentHTML('beforeend', cellHTML)
+        const canvas = document.querySelector('canvas')
+        const ctx = canvas.getContext('2d');
+        const w = 20
+        const h = 20
+        ctx.clearRect(0,0,60,60) // clear canvas each render
+        grid.forEach((row, y) => {
+            row.forEach((cell, x) => {
+                ctx.beginPath()
+                ctx.rect(x*20,y*20,w,h)
+            ctx.fillStyle = cell == 1 ? 'yellow' : 'grey'
+            ctx.fill();
+            ctx.closePath()
             })
         })
         updateGrid();
