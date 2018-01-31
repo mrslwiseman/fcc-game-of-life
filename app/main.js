@@ -2,9 +2,21 @@ const game = (function(){
 "use strict";
 
     let grid = [
-        [1,0,0],
-        [0,1,1],
-        [0,0,1]
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
     
     ]
 
@@ -117,21 +129,29 @@ function init(){
         }
         
     const renderGrid = () => {
-        const gridContainer = document.querySelector('.gridContainer');
-        // gridContainer.innerHTML = "";
-        // ==> array
         const canvas = document.querySelector('canvas')
         const ctx = canvas.getContext('2d');
         const w = 20
         const h = 20
-        ctx.clearRect(0,0,60,60) // clear canvas each render
+        
+        // clear canvas on each render
+        ctx.beginPath()
+        ctx.rect(0,0,600,600)
+        ctx.fillStyle = 'grey'
+        ctx.fill()
+        ctx.closePath()
+
         grid.forEach((row, y) => {
             row.forEach((cell, x) => {
-                ctx.beginPath()
-                ctx.rect(x*20,y*20,w,h)
-            ctx.fillStyle = cell == 1 ? 'yellow' : 'grey'
-            ctx.fill();
-            ctx.closePath()
+                // draw live cells only
+                if(cell === 1){
+                    ctx.beginPath()
+                    ctx.rect(x*20,y*20,w,h)
+                    ctx.fillStyle = 'yellow'
+                    ctx.fill();
+                    ctx.closePath()
+                } 
+           
             })
         })
         updateGrid();
