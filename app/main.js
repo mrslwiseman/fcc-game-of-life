@@ -1,77 +1,70 @@
-const game = (function(){
-"use strict";
+const game = (function () {
+    "use strict";
 
     let grid = [
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
-    
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
     ]
 
-// let grid = [
-//     [0,1,0],
-//     [0,1,1],
-//     [0,0,1]
-// ]
+    const CELL_SIZE = 20;
+    const CANVAS_HEIGHT = 400;
+    const CANVAS_WIDTH = 600;
+    const CELL_ALIVE_COLOUR = 'yellow'
+    const CELL_DEAD_COLOUR = 'grey'
 
-function init(){
-    const renderNextBtn = document.querySelector('.controls__next');
-    renderNextBtn.addEventListener('click', (e) => {setGridState()} )
-
-}
-
-function setGridState(){
-    grid = drawGrid();
-}
-
-// function updateGrid(prevGrid, nextGrid){
-//     prev
-//     return nextGrid
-// }
-
-
-    function applyRules(i, j, cell) {
-        const alive = cell === 1 ? true : false;
-        const neighbours = listNeighbours(i, j) // returns a number of neighbours
-        let change = false;
-
-        if(alive){
-            if(neighbours <= 1 || neighbours >= 4){
-                change = 0 //dead
-            } else {
-                change = 1;
-            }  
-        } else if(neighbours === 3){ // if dead but has 3 neighbours, comes to life
-                change = 1;
-        }
-    return change === false ? cell : change;
-    
+    function init() {
+        const renderNextBtn = document.querySelector('.controls__next');
+        renderNextBtn.addEventListener('click', (e) => { updateGrid() })
+        updateGrid();
     }
 
-    function listNeighbours(i, j) {
+    function updateGrid() {
+        grid = nextGrid();
+    }
+
+
+    function applyRulesToCell(y, x, cell) {
+        const alive = cell === 1 ? true : false;
+        const neighboursCount = countNeighbours(y, x) // returns a number of neighbours
+        let change = false;
+
+        if (alive) {
+            if (neighboursCount <= 1 || neighboursCount >= 4) {
+                change = 0 // dead :(
+            } 
+        } else if (!alive && neighboursCount === 3) { 
+            change = 1; // comes back to life :)
+        }
+        return change === false ? cell : change;
+
+    }
+
+    function countNeighbours(i, j) {
         let neighbours = 0;
-    
+
         const currentCellPos = { i, j }
-    
+
         const rowAbove = i > 0;
-        const rowBelow = i < grid.length -1;
+        const rowBelow = i < grid.length - 1;
         const colLeft = j > 0;
         const colRight = j < grid[0].length;
-    
+
         // ROW ABOVE ------------------------------------
-    
+
         if (rowAbove) {
             if (colLeft) {
                 // topLeft alive?
@@ -90,7 +83,7 @@ function setGridState(){
                 neighbours++
             }
         }
-    
+
         // ROW BELOW ------------------------------------
         if (rowBelow) {
             if (colLeft) {
@@ -98,7 +91,7 @@ function setGridState(){
                 if (grid[i + 1][j - 1] === 1) {
                     neighbours++
                 }
-    
+
             }
             if (colRight) {
                 // bottomRight alive?
@@ -110,93 +103,67 @@ function setGridState(){
             if (grid[i + 1][j] === 1) {
                 neighbours++
             }
-    
+
         }
-    
+
         // LEFT AND RIGHT ------------------------------------
         if (colLeft) {
             // left alive?
             if (grid[i][j - 1] === 1) {
                 neighbours++
             }
-    
+
         }
         if (colRight) {
             // right alive?
             if (grid[i][j + 1] === 1) {
                 neighbours++
             }
-    
+
         }
         // return length of neighbour cells that are ALIVE
         return neighbours;
     }
 
-    const drawGrid = () => {
 
+    const canvas = (function () {
         const canvas = document.querySelector('canvas')
         const ctx = canvas.getContext('2d');
-        const w = 20
-        const h = 20
-        
-        // clear canvas on each render
-        ctx.beginPath()
-        ctx.rect(0,0,600,600)
-        ctx.fillStyle = 'grey'
-        ctx.fill()
-        ctx.closePath()
 
-        
-        return grid.map((row, y) => {
-            console.log({row})
-            return row.map((cell, x) => {
-                console.log({cell})
+        const clear = () => {
+            ctx.beginPath()
+            ctx.rect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+            ctx.fillStyle = CELL_DEAD_COLOUR
+            ctx.fill()
+            ctx.closePath()
+        }
 
-                if(cell === 1){
-                    ctx.beginPath()
-                    ctx.rect(x*20,y*20,w,h)
-                    ctx.fillStyle = 'yellow'
-                    ctx.fill();
-                    ctx.closePath()
-                } 
+        const drawAliveCell = (x, y) => {
+            ctx.beginPath()
+            ctx.rect(x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE)
+            ctx.fillStyle = CELL_ALIVE_COLOUR
+            ctx.fill();
+            ctx.closePath()
+        }
+        return {
+            clear,
+            drawAliveCell
+        }
+    })()
 
-                return applyRules(y, x, cell) // return 1 || 0
+    const nextGrid = () => {
+        canvas.clear() // clear canvas between redraws
+        return grid.map((row, y) => { // loop over rows
+            return row.map((cell, x) => { // loop over cells in row
+                cell === 1 && canvas.drawAliveCell(x, y) // draw only the alive cells
+                return applyRulesToCell(y, x, cell) // returns 1 || 0
             })
         })
-        }
-        
-    // const renderGrid = () => {
-    //     const canvas = document.querySelector('canvas')
-    //     const ctx = canvas.getContext('2d');
-    //     const w = 20
-    //     const h = 20
-        
-    //     // clear canvas on each render
-    //     ctx.beginPath()
-    //     ctx.rect(0,0,600,600)
-    //     ctx.fillStyle = 'grey'
-    //     ctx.fill()
-    //     ctx.closePath()
+    }
 
-    //     grid.forEach((row, y) => {
-    //         row.forEach((cell, x) => {
-    //             // draw live cells only
-    //             if(cell === 1){
-    //                 ctx.beginPath()
-    //                 ctx.rect(x*20,y*20,w,h)
-    //                 ctx.fillStyle = 'yellow'
-    //                 ctx.fill();
-    //                 ctx.closePath()
-    //             } 
-           
-    //         })
-    //     })
-    //     drawGrid();
-    // }
-init();
+    init();
 
-return {
-    play: drawGrid,
-    grid: grid
-}
+    return {
+        next: updateGrid
+    }
 })()
