@@ -1,0 +1,17 @@
+{
+  "name": "Game of Life",
+  "version": "0.1.0",
+  "description": "John Conways game of life",
+  "main": "gulpfile.js",
+  "scripts": {
+    "start": "gulp"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.2.0",
+    "gulp": "^3.8.11",
+    "gulp-autoprefixer": "^4.1.0",
+    "gulp-sass": "^3.1.0"
+  }
+}
