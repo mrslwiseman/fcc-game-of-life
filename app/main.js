@@ -1,7 +1,9 @@
 const game = (function () {
     "use strict";
 
-    let initialGrid = [
+    const gridTemplates = {}
+    
+    gridTemplates.grid1 = [
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -24,10 +26,35 @@ const game = (function () {
         [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
     ]
+    gridTemplates.grid2 = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
+    ]
+
+
+    let CURRENT_GRID = gridTemplates.grid1
     const SETTINGS = {
-        GRID_WIDTH: initialGrid[0].length,
-        GRID_HEIGHT: initialGrid.length,
+        GRID_WIDTH: 20,
+        GRID_HEIGHT: 20,
         CELL_SIZE: 25,
         CANVAS_HEIGHT: 600,
         CANVAS_WIDTH: 600,
@@ -38,6 +65,8 @@ const game = (function () {
 
     const init = () => {
         
+        const selectGrid = document.querySelector('.controls__select');
+        selectGrid.addEventListener('click', () => grid.change())
         const renderNextBtn = document.querySelector('.controls__next');
         renderNextBtn.addEventListener('click', () => grid.next())
 
@@ -46,7 +75,7 @@ const game = (function () {
 
         const canvasElement = document.querySelector('canvas')
         canvasElement.addEventListener('click', grid.handleClick);      
-        canvas.renderGrid(initialGrid);
+        canvas.renderGrid(CURRENT_GRID);
     }
     
     const grid = (() => {
@@ -61,9 +90,22 @@ const game = (function () {
             }
         }
         const next = (() => {
-            let prevGrid = initialGrid;
-            return (canvasEdit) => {
-                prevGrid = canvasEdit ? edit(canvasEdit.y, canvasEdit.x, prevGrid) : nextGrid(prevGrid)
+            // sets initial grid on IIFE call
+            let prevGrid = CURRENT_GRID;
+            return ({canvasEdit, gridToUse} = {}) => {
+                if(gridToUse){
+                    console.log('grid to use, true')
+                    prevGrid = gridToUse;
+                } else {
+                    if(canvasEdit){
+                        console.log('edit true');
+                        
+                        prevGrid = edit(canvasEdit.y, canvasEdit.x, prevGrid)
+                    } else {
+                        prevGrid = nextGrid(prevGrid)
+                    }
+                }
+
                 canvas.renderGrid(prevGrid);
             }
         })()
@@ -74,17 +116,23 @@ const game = (function () {
             return newGrid
         }
 
+        const change = () => {
+            CURRENT_GRID = gridTemplates.grid2;
+            grid.next({gridToUse: CURRENT_GRID})
+        }
+
         const handleClick = (e) => {
             const x = Math.round( (e.offsetX +( 25/2)) /25 -1);
             const y = Math.round( (e.offsetY +( 25/2)) /25 -1);
-            next({x,y})
+            next({canvasEdit: {x,y}})
         }
 
         return {
             loop,
             next,
             edit,
-            handleClick
+            handleClick,
+            change
         }
     })()
 
@@ -180,6 +228,7 @@ const game = (function () {
 
     return {
         next: grid.next,
-        loop: grid.loop
+        loop: grid.loop, 
+        settings: SETTINGS
     }
 })()
