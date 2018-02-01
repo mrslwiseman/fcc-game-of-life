@@ -65,19 +65,29 @@ const game = (function () {
 
     const init = () => {
         
-        const selectGrid = document.querySelector('.controls__select');
-        selectGrid.addEventListener('click', () => grid.change())
+  
         const renderNextBtn = document.querySelector('.controls__next');
         renderNextBtn.addEventListener('click', () => grid.next())
 
         const playLoop = document.querySelector('.controls__play');
         playLoop.addEventListener('click', (e) =>  grid.loop())
-
+        
         const canvasElement = document.querySelector('canvas')
         canvasElement.addEventListener('click', grid.handleClick);      
         canvas.renderGrid(CURRENT_GRID);
+        
+        const gridSelect = document.querySelector('#gridSelect');
+        gridSelect.addEventListener('change', onGridSelect)
+
     }
     
+    const onGridSelect = (e) => {
+        console.log(e.target.value);
+        const selection = e.target.value
+        CURRENT_GRID = gridTemplates[selection];
+        grid.next({newGridSelected: CURRENT_GRID})
+    }
+
     const grid = (() => {
         let timer = null;
         const loop = () => {
@@ -92,47 +102,39 @@ const game = (function () {
         const next = (() => {
             // sets initial grid on IIFE call
             let prevGrid = CURRENT_GRID;
-            return ({canvasEdit, gridToUse} = {}) => {
-                if(gridToUse){
-                    console.log('grid to use, true')
-                    prevGrid = gridToUse;
+            return ({canvasEdited, newGridSelected} = {}) => {
+                if(newGridSelected){
+                    prevGrid = newGridSelected;
                 } else {
-                    if(canvasEdit){
-                        console.log('edit true');
-                        
-                        prevGrid = edit(canvasEdit.y, canvasEdit.x, prevGrid)
+                    if(canvasEdited){
+                        prevGrid = edit(canvasEdited.y, canvasEdited.x, prevGrid)
                     } else {
                         prevGrid = nextGrid(prevGrid)
                     }
                 }
-
                 canvas.renderGrid(prevGrid);
             }
         })()
 
         const edit = (y,x,grid) => {
-            let newGrid = grid;
-            newGrid[y][x] = newGrid[y][x] === 1 ? 0 : 1;
-            return newGrid
+            let newGridSelected = grid;
+            newGridSelected[y][x] = newGridSelected[y][x] === 1 ? 0 : 1;
+            return newGridSelected
         }
 
-        const change = () => {
-            CURRENT_GRID = gridTemplates.grid2;
-            grid.next({gridToUse: CURRENT_GRID})
-        }
 
         const handleClick = (e) => {
             const x = Math.round( (e.offsetX +( 25/2)) /25 -1);
             const y = Math.round( (e.offsetY +( 25/2)) /25 -1);
-            next({canvasEdit: {x,y}})
+            next({canvasEdited: {x,y}})
         }
 
         return {
+            timer,
             loop,
             next,
             edit,
-            handleClick,
-            change
+            handleClick
         }
     })()
 
