@@ -1,20 +1,16 @@
 {
-  "name": "Game-of-Life",
+  "name": "react-game-of-life",
   "version": "0.1.0",
-  "description": "John Conways game of life",
-  "main": "gulpfile.js",
-  "scripts": {
-    "start": "gulp"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "browser-sync": "^2.2.0",
-    "gulp": "^3.8.11",
-    "gulp-autoprefixer": "^4.1.0",
-    "gulp-sass": "^3.1.0"
-  },
+  "private": true,
   "dependencies": {
-    "lodash": "^4.17.4"
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-scripts": "1.1.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
   }
 }

@@ -1,0 +1,12 @@
+const SETTINGS = {
+    GRID_WIDTH: 30,
+    GRID_HEIGHT: 30,
+    CELL_SIZE: 30,
+    CANVAS_HEIGHT: 600,
+    CANVAS_WIDTH: 600,
+    CELL_ALIVE_COLOUR: 'yellow',
+    CELL_DEAD_COLOUR: 'grey',
+    REFRESH_RATE: 500
+}
+
+export default SETTINGS;
