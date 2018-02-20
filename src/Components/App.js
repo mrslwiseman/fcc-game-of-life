@@ -3,35 +3,15 @@ import Canvas from './Canvas';
 import './App.css';
 import { canvas } from '../scripts/canvas';
 import SETTINGS from '../scripts/settings';
+import grids from '../grids';
 class App extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      grid: [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-      ],
+      grid: grids.ten_cell_row,
       looping: false,
-      speed: 500
+      speed: 300
     }
   }
 
@@ -45,13 +25,15 @@ class App extends Component {
 
   next = () => {
     const nextGrid = canvas.update(this.state.grid);
-    this.setState({ grid: nextGrid });
+    console.log(nextGrid);
+    
+    this.setState({ grid: nextGrid }, console.log('finished setting state'));
   }
 
   play = () => {
     return (() => {
       let timer;
-      if (this.state.looping == true) {
+      if (this.state.looping === true) {
         this.next();
         timer = setTimeout(this.play, this.state.speed);
       } else {
@@ -96,13 +78,21 @@ class App extends Component {
     
   }
 
+  onGridSelect = (e) => {
+    console.log(e.target.value);
+    this.setState({
+      grid: grids[e.target.value]
+    })
+    //this.state.grid = e.target.value;
+  }
 
   render() {
 
     return (
       <div className="App">
-        <Canvas grid={this.state.grid}
-        onCanvasClick={this.onCanvasClick} />
+        <Canvas 
+          grid={this.state.grid}
+          onCanvasClick={this.onCanvasClick} />
         <button onClick={this.handleNextClick}>
           Next
         </button>
@@ -121,6 +111,17 @@ class App extends Component {
           type="range"
           min="0"
           max="1000" />
+
+          <select
+          type="select"
+          onChange={this.onGridSelect}
+          >
+          value={this.state.grid}
+          <option value="ten_cell_row">10 Cell Row</option>
+          <option value="glider">Glider</option>
+          <option value="small_exploder">Small Exploder</option>
+          <option value="rhok">RHOK</option>
+          </select>
       </div>
     );
   }
